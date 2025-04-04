@@ -32,9 +32,9 @@ public ActionResult<string> Status()
 }
 
 [HttpPost("save")]
-public ActionResult<Guid> SaveBoard([FromBody] Board board)
+public async Task<ActionResult<Guid>> SaveBoard([FromBody] Board board)
 {
-    var id = _service.SaveBoard(board);
+    var id = await _service.SaveBoardAsync(board);
     return Ok(id);
 }
 

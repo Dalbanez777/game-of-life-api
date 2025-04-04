@@ -20,12 +20,13 @@ namespace GameOfLife.Services
             return board != null && board.Rows > 0 && board.Columns > 0 && board.Cells != null;
         }
 
-        public Guid SaveBoard(Board board)
-        {
-            var id = Guid.NewGuid();
-            _boardStorage[id] = board;
-            return id;
-        }
+        public async Task<Guid> SaveBoardAsync(Board board)
+{
+    var id = Guid.NewGuid();
+    _boardStorage[id] = board;
+    await Task.CompletedTask; // Placeholder to simulate async (e.g., future DB/file writes)
+    return id;
+}
 
         public Board? GetBoard(Guid id)
 {
