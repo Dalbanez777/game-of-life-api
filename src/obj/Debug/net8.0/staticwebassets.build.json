@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "d24jx7n4H3NElrnRAq8aobjpf3y173KTTrnO+/TInQ4=",
+  "Source": "GameOfLife",
+  "BasePath": "_content/GameOfLife",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
