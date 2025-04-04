@@ -38,6 +38,20 @@ public ActionResult<Guid> SaveBoard([FromBody] Board board)
     return Ok(id);
 }
 
+[HttpGet("{id}")]
+public ActionResult<Board> GetBoardById(string id)
+{
+    if (!Guid.TryParse(id, out var guid))
+        return BadRequest("Invalid ID format.");
+
+    var board = _service.GetBoard(guid);
+
+    if (board == null)
+        return NotFound("Board not found.");
+
+    return Ok(board);
+}
+
 
     }
 }

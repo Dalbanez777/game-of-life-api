@@ -5,7 +5,7 @@
 Implement Conway’s Game of Life as a RESTful API.  
 The Game of Life is a zero-player game that evolves based on its initial state using simple rules on a grid of cells. The goal is to simulate the next generation(s) of a given board configuration.
 
-## ▶️ Steps to Run Locally
+##  Steps to Run Locally
 
 ### Prerequisites:
 - [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download)
@@ -51,3 +51,17 @@ Trade-offs:
 	•	In-memory storage is fast and simple but not persistent across restarts.
 	•	No API authentication or rate limiting — it’s focused purely on functionality.
 	•	Performance is acceptable for small/medium boards but would need optimization for very large grids or high concurrency.
+
+    ## Scalability Considerations
+
+- In-memory storage can be replaced with a distributed cache (e.g., Redis) for multi-instance scaling.
+- API is stateless and can be load-balanced easily.
+- Logic is abstracted to support swapping in a database (e.g., MongoDB or SQL).
+- Future versions can add board compression for reduced memory footprint on large grids.
+
+## Designed for Extensibility
+
+- Easily extendable to support user sessions or multiplayer patterns
+- Replace in-memory board storage with persistent databases (e.g., SQL, NoSQL)
+- REST endpoints can be expanded to include board history, analytics, or even live visualizations
+.
