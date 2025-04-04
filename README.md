@@ -64,3 +64,4 @@ Trade-offs:
 - Easily extendable to support user sessions or multiplayer patterns
 - Replace in-memory board storage with persistent databases (e.g., SQL, NoSQL)
 - REST endpoints can be expanded to include board history, analytics, or even live visualizations
+.
