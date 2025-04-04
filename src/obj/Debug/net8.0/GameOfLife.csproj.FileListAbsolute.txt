@@ -31,3 +31,4 @@
 /Users/albanex/Desktop/GameOfLife_NET8_WithSolution/src/obj/Debug/net8.0/GameOfLife.pdb
 /Users/albanex/Desktop/GameOfLife_NET8_WithSolution/src/obj/Debug/net8.0/GameOfLife.genruntimeconfig.cache
 /Users/albanex/Desktop/GameOfLife_NET8_WithSolution/src/obj/Debug/net8.0/ref/GameOfLife.dll
+/Users/albanex/Desktop/GameOfLife_NET8_WithSolution/src/obj/Debug/net8.0/GameOfLife.sourcelink.json
