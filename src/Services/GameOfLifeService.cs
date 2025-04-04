@@ -27,6 +27,11 @@ namespace GameOfLife.Services
             return id;
         }
 
+        public Board? GetBoard(Guid id)
+{
+    return _boardStorage.TryGetValue(id, out var board) ? board : null;
+}
+
         public Board GetNextState(Board board)
         {
             var next = new int[board.Rows][];

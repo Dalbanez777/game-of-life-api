@@ -5,7 +5,7 @@
 Implement Conway’s Game of Life as a RESTful API.  
 The Game of Life is a zero-player game that evolves based on its initial state using simple rules on a grid of cells. The goal is to simulate the next generation(s) of a given board configuration.
 
-## ▶️ Steps to Run Locally
+##  Steps to Run Locally
 
 ### Prerequisites:
 - [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download)
@@ -16,6 +16,7 @@ The Game of Life is a zero-player game that evolves based on its initial state u
 ```bash
 git clone <your-repo-url>
 cd GameOfLife_NET8_WithSolution
+```
 
 ### 2. Run the application:
 
@@ -34,7 +35,7 @@ http://localhost:5000 (HTTP)
 Open your browser and go to:
 http://localhost:5000/swagger
 
-Explanation of the Solution and Thought Process
+## Explanation of the Solution and Thought Process
 	•	The project follows a clean architecture structure: src/ for app logic and tests/ for tests.
 	•	GameOfLifeService implements the main game logic including board validation and state transitions.
 	•	State is stored in-memory using a Dictionary<Guid, Board> to simulate persistence.
@@ -42,12 +43,66 @@ Explanation of the Solution and Thought Process
 	•	Swagger is integrated for API discoverability and easy testing.
 	•	xUnit is used for unit testing core logic without relying on the API layer.
 
-    Assumptions:
+   ## Assumptions:
 	•	All boards are rectangular and contain binary cell values (0 or 1).
 	•	Input data is well-formed JSON and validated by the model.
 	•	No persistence to disk or database — all data is in-memory.
 
-Trade-offs:
+## Trade-offs:
 	•	In-memory storage is fast and simple but not persistent across restarts.
 	•	No API authentication or rate limiting — it’s focused purely on functionality.
 	•	Performance is acceptable for small/medium boards but would need optimization for very large grids or high concurrency.
+
+    ## Scalability Considerations
+
+- In-memory storage can be replaced with a distributed cache (e.g., Redis) for multi-instance scaling.
+- API is stateless and can be load-balanced easily.
+- Logic is abstracted to support swapping in a database (e.g., MongoDB or SQL).
+- Future versions can add board compression for reduced memory footprint on large grids.
+
+## Designed for Extensibility
+
+- Easily extendable to support user sessions or multiplayer patterns
+- Replace in-memory board storage with persistent databases (e.g., SQL, NoSQL)
+- REST endpoints can be expanded to include board history, analytics, or even live visualizations
+
+##  Performance Testing with k6
+
+This project includes a stress test using [k6](https://k6.io/) to simulate concurrent traffic on the `POST /api/GameOfLife/next` endpoint.
+
+### Location
+
+The test script is located in the `k6/` folder:
+
+```
+k6/
+└── loadTest.js
+```
+
+### How to Run
+
+First, ensure the API is running locally using:
+
+```bash
+dotnet run --project src
+```
+
+Then, in a separate Mac terminal window, run the load test:
+
+```bash
+k6 run k6/loadTest.js
+```
+
+### Test Scenarios
+
+| Test Type        | VUs (Virtual Users) | Duration | Total Requests | Success Rate | Avg Response Time |
+|------------------|---------------------|----------|----------------|---------------|--------------------|
+| Light Load       | 5                   | 5s       | 25             | ✅ 100%       | ⚡ ~22ms            |
+| Heavy Load       | 50                  | 10s      | 500            | ✅ 100%       | ⚡ ~5ms             |
+
+### Sample Command
+
+Outcome
+	•	No failed requests (0%)
+	•	API handled 50 parallel users for 10s without slowdowns
+	•	Proves concurrency stability and solid response times
