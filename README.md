@@ -69,4 +69,20 @@ API
 
 Endpoints Table
 
-## Method Endpoint Description Request Body
+Method | Endpoint                  | Description                       | Request Body   | Response
+------ | ------------------------- | --------------------------------- | -------------- | ------------------------
+GET    | /api/GameOfLife/status    | Check if the API is running       | None           | 200 OK with text
+POST   | /api/GameOfLife/save      | Save a new board                  | JSON Board     | 200 OK with Guid
+POST   | /api/GameOfLife/next      | Compute next state of a board     | JSON Board     | 200 OK with Board
+GET    | /api/GameOfLife/{id}      | Get a previously saved board by ID| None           | 200 OK with Board or 404
+
+
+Scalability Considerations
+
+This project was designed with scalability in mind:
+	•	Stateless Services: The GameOfLifeService is stateless and thread-safe, allowing the application to scale horizontally across multiple instances without synchronization issues.
+	•	Swappable Storage Layer: The current in-memory ConcurrentDictionary storage can easily be replaced with distributed caching solutions (e.g., Redis) or persistent databases (e.g., PostgreSQL, MongoDB).
+	•	Lightweight Controllers: Controller logic is thin and delegates processing to services, promoting better separation of concerns and easier load balancing.
+	•	Future-ready Middleware: The ASP.NET Core pipeline can be extended with middleware for rate-limiting, caching, authentication, and telemetry to support larger deployments.
+
+These considerations make the application suitable for containerization (e.g., Docker) and deployment in cloud environments like Azure, AWS, or GCP.
