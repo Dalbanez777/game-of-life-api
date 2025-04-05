@@ -20,35 +20,51 @@ namespace GameOfLife.Services
             return board != null && board.Rows > 0 && board.Columns > 0 && board.Cells != null;
         }
 
-        public Guid SaveBoard(Board board)
-        {
-            var id = Guid.NewGuid();
-            _boardStorage[id] = board;
-            return id;
-        }
+       public Guid SaveBoard(Board board)
+{
+    try
+    {
+        var id = Guid.NewGuid();
+        _boardStorage[id] = board;
+        return id;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Failed to save board");
+        throw;
+    }
+}
 
         public Board? GetBoard(Guid id)
 {
     return _boardStorage.TryGetValue(id, out var board) ? board : null;
 }
 
-        public Board GetNextState(Board board)
+       public Board GetNextState(Board board)
+{
+    try
+    {
+        var next = new int[board.Rows][];
+        for (int i = 0; i < board.Rows; i++)
         {
-            var next = new int[board.Rows][];
-            for (int i = 0; i < board.Rows; i++)
+            next[i] = new int[board.Columns];
+            for (int j = 0; j < board.Columns; j++)
             {
-                next[i] = new int[board.Columns];
-                for (int j = 0; j < board.Columns; j++)
-                {
-                    int liveNeighbors = CountLiveNeighbors(board.Cells, i, j);
-                    if (board.Cells[i][j] == 1)
-                        next[i][j] = (liveNeighbors == 2 || liveNeighbors == 3) ? 1 : 0;
-                    else
-                        next[i][j] = (liveNeighbors == 3) ? 1 : 0;
-                }
+                int liveNeighbors = CountLiveNeighbors(board.Cells, i, j);
+                if (board.Cells[i][j] == 1)
+                    next[i][j] = (liveNeighbors == 2 || liveNeighbors == 3) ? 1 : 0;
+                else
+                    next[i][j] = (liveNeighbors == 3) ? 1 : 0;
             }
-            return new Board { Rows = board.Rows, Columns = board.Columns, Cells = next };
         }
+        return new Board { Rows = board.Rows, Columns = board.Columns, Cells = next };
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Failed to compute next state");
+        throw;
+    }
+}
 
         private int CountLiveNeighbors(int[][] cells, int x, int y)
         {
