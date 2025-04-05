@@ -1,7 +1,16 @@
 using Microsoft.AspNetCore.Builder;
 using GameOfLife.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+
+namespace GameOfLife
+{
+
+public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -15,3 +24,7 @@ app.UseSwaggerUI();
 app.MapControllers();
 
 app.Run();
+
+  }
+    }
+}
