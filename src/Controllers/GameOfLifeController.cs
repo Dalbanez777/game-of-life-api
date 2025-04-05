@@ -16,14 +16,20 @@ namespace GameOfLife.Controllers
         }
 
         [HttpPost("next")]
-        public ActionResult<Board> GetNextState([FromBody] Board board)
-        {
-            if (!_service.IsValidBoard(board))
-                return BadRequest("Invalid board");
+public ActionResult<Board> GetNextState([FromBody] Board board)
+{
+    if (board == null)
+        return BadRequest("Board is required.");
 
-            var next = _service.GetNextState(board);
-            return Ok(next);
-        }
+    if (board.Rows <= 0 || board.Columns <= 0)
+        return BadRequest("Board dimensions must be greater than 0.");
+
+    if (board.Cells == null || board.Cells.Length != board.Rows || board.Cells.Any(r => r.Length != board.Columns))
+        return BadRequest("Invalid board structure.");
+
+    var next = _service.GetNextState(board);
+    return Ok(next);
+}
 
         [HttpGet("status")]
 public ActionResult<string> Status()
