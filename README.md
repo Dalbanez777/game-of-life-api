@@ -86,3 +86,31 @@ This project was designed with scalability in mind:
 	•	Future-ready Middleware: The ASP.NET Core pipeline can be extended with middleware for rate-limiting, caching, authentication, and telemetry to support larger deployments.
 
 These considerations make the application suitable for containerization (e.g., Docker) and deployment in cloud environments like Azure, AWS, or GCP.
+
+### Docker Support
+
+You can run the Game of Life API inside a Docker container using the included `Dockerfile`.
+
+#### 🔧 Build the image
+
+```bash
+docker build -t gameoflife-api .
+```
+
+#### ▶Run the container
+
+```bash
+docker run -d -p 5000:80 --name gameoflife-container gameoflife-api
+```
+
+Then visit: [http://localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html)
+
+#### Stop & Remove the container
+
+```bash
+docker stop gameoflife-container
+docker rm gameoflife-container
+```
+
+> Make sure nothing else is using port `5000`, or map to a different one with `-p 5001:80`
+
