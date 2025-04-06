@@ -4,48 +4,63 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using GameOfLife.Services;
 
-
 namespace GameOfLife
 {
-
-public class Program
+    public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Add environment config support
+            builder.Configuration
+                   .SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                   .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                   .AddEnvironmentVariables();
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<GameOfLifeService>();
+            // Services
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+            builder.Services.AddSingleton<GameOfLifeService>();
 
-var app = builder.Build();
+            var env = builder.Environment;
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
 
-app.UseExceptionHandler(errorApp =>
+builder.Logging.Configure(options =>
 {
-    errorApp.Run(async context =>
-    {
-        context.Response.StatusCode = 500;
-        context.Response.ContentType = "application/json";
-
-        var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
-        if (errorFeature != null)
-        {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
-            logger.LogError(errorFeature.Error, "Unhandled exception");
-
-            await context.Response.WriteAsJsonAsync(new { error = "An unexpected error occurred. Please try again later." });
-        }
-    });
+    Console.WriteLine($"🌱 Running in: {env.EnvironmentName}");
 });
 
-app.UseSwagger();
-app.UseSwaggerUI();
-app.MapControllers();
+            var app = builder.Build();
 
-app.Run();
+            // Error handling
+            app.UseExceptionHandler(errorApp =>
+            {
+                errorApp.Run(async context =>
+                {
+                    context.Response.StatusCode = 500;
+                    context.Response.ContentType = "application/json";
 
-  }
+                    var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    if (errorFeature != null)
+                    {
+                        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+                        logger.LogError(errorFeature.Error, "Unhandled exception");
+
+                        await context.Response.WriteAsJsonAsync(new { error = "An unexpected error occurred. Please try again later." });
+                    }
+                });
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.MapControllers();
+
+            app.Run();
+        }
     }
 }
