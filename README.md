@@ -91,7 +91,7 @@ These considerations make the application suitable for containerization (e.g., D
 
 You can run the Game of Life API inside a Docker container using the included `Dockerfile`.
 
-#### 🔧 Build the image
+####  Build the image
 
 ```bash
 docker build -t gameoflife-api .
